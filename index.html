@@ -19,10 +19,18 @@
                 <th>Model</th>
                 <th>Year</th>
                 <th>Trim</th>
-                <th>Odd</th>
-                <th>Odd 2</th>
-                <th>Odd 3</th>
-                <!-- Add more headers as per your cleaned CSV file -->
+                <th>MSRP</th>
+                <th>Invoice Price</th>
+                <th>Used/New Price</th>
+                <th>Body Size</th>
+                <th>Body Style</th>
+                <th>Cylinders</th>
+                <th>Engine Aspiration</th>
+                <th>Drivetrain</th>
+                <th>Transmission</th>
+                <th>Horsepower</th>
+                <th>Torque</th>
+                <th>Highway Fuel Economy</th>
             </tr>
         </thead>
         <tbody>
@@ -32,30 +40,35 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <script>
-        // Path to your CSV file
         const csvFilePath = 'https://generate94.github.io/Cars-1990-2025/Cars%201990-2025%20-%20carsheet.csv';
 
-        // Function to fetch and display the CSV data
         function loadCSV() {
             Papa.parse(csvFilePath, {
                 download: true,
-                header: true,
+                header: false,  // Not using auto-headers to manually handle rows
                 complete: function(results) {
                     const data = results.data;
                     const tableBody = document.getElementById('car-table').getElementsByTagName('tbody')[0];
 
-                    data.forEach(row => {
+                    for (let i = 0; i < data.length; i += 2) {
                         let newRow = tableBody.insertRow();
-                        Object.values(row).forEach(cellData => {
+
+                        // Combine the odd and even rows
+                        const combinedRow = [...data[i], ...data[i + 1]];
+
+                        // Debug: Log the combined row to check if it's correct
+                        console.log('Combined Row:', combinedRow);
+
+                        // Add each cell data to the new row
+                        combinedRow.forEach(cellData => {
                             let newCell = newRow.insertCell();
                             newCell.textContent = cellData;
                         });
-                    });
+                    }
                 }
             });
         }
 
-        // Call the function to load CSV data on page load
         window.onload = loadCSV;
     </script>
 </body>
